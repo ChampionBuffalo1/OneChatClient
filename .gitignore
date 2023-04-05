@@ -1,7 +1,8 @@
 # lock (Only using package-lock.json)
 yarn.lock
 pnpm-lock.yaml
-
+# build artifacts
+dist/
 # dependencies
 /node_modules
 /.pnp
