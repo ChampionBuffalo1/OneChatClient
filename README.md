@@ -1,6 +1,7 @@
 # OneChat
 
-OneChat is a simple chat application. This repository contains the frontend code of OneChat.
+OneChat is a simple chat application. 
+This repository only contains the frontend code of OneChat.
 
 ## Running locally
 
