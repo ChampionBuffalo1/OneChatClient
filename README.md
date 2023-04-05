@@ -4,7 +4,7 @@ OneChat is a simple chat application. This repository contains the frontend code
 
 ## Running locally
 
-The app by default runs on port `3000`.
+The app by default runs on port `5173`.
 
 Clone the project
 
