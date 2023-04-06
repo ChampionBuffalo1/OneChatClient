@@ -1,4 +1,4 @@
-import './index.css';
+import './styles/global.scss';
 import App from './App';
 import AboutPage from './About';
 
