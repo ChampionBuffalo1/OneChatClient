@@ -1,5 +1,5 @@
-# lock (Only using package-lock.json)
-yarn.lock
+# lock (Only using yarn.json)
+package-lock.json
 pnpm-lock.yaml
 # build artifacts
 dist/
