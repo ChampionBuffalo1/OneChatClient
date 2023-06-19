@@ -1,17 +1,13 @@
 import { useCallback } from 'react';
-import { useAppDispatch } from '../lib/hooks';
-import { useMutation } from '@tanstack/react-query';
-import { setToken } from '../lib/reducers/token';
-import { AuthenticationProps } from '../pages/Authentication';
+import DisplayError from './Error';
 import { axiosInstance } from '../lib/api';
 import { AxiosStatusError } from '../typings';
-import DisplayError from './Error';
-
+import { useMutation } from '@tanstack/react-query';
+import { AuthenticationProps } from '../pages/Authentication';
 
 const userErrCode = [17, 19, 22];
 
 export default function AuthForm({ type }: AuthenticationProps) {
-  const dispatch = useAppDispatch();
   const mutation = useMutation({
     mutationKey: [type],
     mutationFn: async ({ username, password }: MutationFnParam) => {
@@ -23,7 +19,6 @@ export default function AuthForm({ type }: AuthenticationProps) {
     },
     onSuccess: data => {
       const { token } = data.results[0];
-      dispatch(setToken(token));
       localStorage.setItem('token', token);
     }
   });

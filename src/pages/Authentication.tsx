@@ -2,9 +2,7 @@ import { useEffect } from 'react';
 import { Command } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import AuthForm from '../components/AuthForm';
-import { setToken } from '../lib/reducers/token';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../lib/hooks';
 
 export interface AuthenticationProps {
   type: 'login' | 'signup';
@@ -12,22 +10,13 @@ export interface AuthenticationProps {
 
 export default function Authentication({ type }: AuthenticationProps) {
   // Default value of `type` is "login"
-  const isLogin = (type || "login") === 'login';
-  const token = useAppSelector(state => state.token.value);
-  const dispatch = useAppDispatch();
+  const isLogin = (type || 'login') === 'login';
   const navigate = useNavigate();
+
   useEffect(() => {
-    if (token) {
-      navigate('/home');
-    } else {
-      const localToken = localStorage.getItem('token');
-      if (localToken) {
-        dispatch(setToken(localToken));
-        console.debug('this will be logged');
-        navigate('/home');
-      }
-    }
-  }, [dispatch, navigate, token]);
+    const token = localStorage.getItem('token');
+    if (token) navigate('/home');
+  }, [navigate]);
 
   return (
     <>

@@ -1,7 +1,7 @@
 import App from './App';
 import { createBrowserRouter } from 'react-router-dom';
 
-import Loading from './components/Loading';
+import Home from './pages/Home';
 import Authentication from './pages/Authentication';
 import LoginProtected from './components/LoginProtected';
 
@@ -20,7 +20,7 @@ export default createBrowserRouter([
   },
   {
     path: '/home',
-    element: <LoginProtected component={Loading} />
+    element: <LoginProtected component={Home} />
   },
   {
     path: '*',
