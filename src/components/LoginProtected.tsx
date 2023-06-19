@@ -1,19 +1,22 @@
-import { ComponentType, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { ComponentType, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { RootState } from '../lib/store';
 
 interface ProtectedRouteProps {
   component: ComponentType;
 }
 
 const ProtectedRoute = ({ component: Component }: ProtectedRouteProps) => {
+  const [render, setRender] = useState(false);
   const navigate = useNavigate();
-  const token = useSelector((state: RootState) => state.token.value);
   useEffect(() => {
-    if (!token) navigate('/');
-  }, [token, navigate]);
-  return <Component />;
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/');
+    } else {
+      setRender(true);
+    }
+  }, [navigate]);
+  return <>{render ? <Component /> : <></>}</>;
 };
 
 export default ProtectedRoute;
