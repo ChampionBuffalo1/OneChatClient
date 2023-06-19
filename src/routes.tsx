@@ -1,7 +1,9 @@
-import { createBrowserRouter } from 'react-router-dom';
 import App from './App';
-import Login from './pages/Login';
-import Register from './pages/Register';
+import { createBrowserRouter } from 'react-router-dom';
+
+import Loading from './components/Loading';
+import Authentication from './pages/Authentication';
+import LoginProtected from './components/LoginProtected';
 
 export default createBrowserRouter([
   {
@@ -10,10 +12,23 @@ export default createBrowserRouter([
   },
   {
     path: '/login',
-    element: <Login />
+    element: <Authentication type="login" />
   },
   {
-    path: '/register',
-    element: <Register />
+    path: '/signup',
+    element: <Authentication type="signup" />
+  },
+  {
+    path: '/home',
+    element: <LoginProtected component={Loading} />
+  },
+  {
+    path: '*',
+    element: (
+      // TODO: make a 404 page
+      <div>
+        <p>404 - Page not found</p>
+      </div>
+    )
   }
 ]);
