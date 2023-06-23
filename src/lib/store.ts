@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import tokenSlice from './reducers/token';
+import messageSlice from './reducers/message';
+import groupSlice from './reducers/groups';
 
 export const reduxStore = configureStore({
   reducer: {
-    token: tokenSlice
+    messages: messageSlice,
+    groups: groupSlice
   }
 });
 
