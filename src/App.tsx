@@ -8,7 +8,7 @@ function App() {
     // Connect to websockets in here
     const token = localStorage.getItem('token');
     navigate(token ? '/home' : '/login');
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="flex justify-center items-center h-screen">

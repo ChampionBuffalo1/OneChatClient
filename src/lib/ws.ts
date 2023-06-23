@@ -1,23 +1,25 @@
-let socket: WebSocket | null = null;
+let socket: WebSocket | undefined;
 
-const startWebsocket = (url: string, messageHandler: Function): void => {
+type handler = (message: Record<string, unknown>) => void;
+
+const startWebsocket = (url: string, messageHandler: handler): void => {
   if (socket) return;
   socket = new WebSocket(url);
-  socket.onmessage = event => {
+  socket.addEventListener('message', event => {
     const jsonMessage = JSON.parse(event.data);
     messageHandler(jsonMessage);
-  };
-  socket.onclose = event => {
-    console.log('Websocket connection closed with reason: ', event);
-    socket = null;
-  };
+  });
+  socket.addEventListener('close', event => {
+    console.log('Websocket connection closed with reason: ' + event);
+    socket = undefined;
+  });
 };
 
 const sendMessage = (message: string): void => socket?.send(JSON.stringify(message));
 
 const closeSocket = () => {
   socket?.close();
-  socket = null;
+  socket = undefined;
 };
 
 export { startWebsocket, sendMessage, closeSocket };

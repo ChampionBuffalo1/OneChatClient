@@ -5,7 +5,7 @@ import { AxiosStatusError } from '../typings';
 import { useMutation } from '@tanstack/react-query';
 import { AuthenticationProps } from '../pages/Authentication';
 
-const userErrCode = [17, 19, 22];
+const userErrCode = new Set([17, 19, 22]);
 
 export default function AuthForm({ type }: AuthenticationProps) {
   const mutation = useMutation({
@@ -34,7 +34,7 @@ export default function AuthForm({ type }: AuthenticationProps) {
       username,
       password
     });
-  }, []);
+  }, [mutation]);
 
   return (
     <div className="grid gap-6">
@@ -43,7 +43,7 @@ export default function AuthForm({ type }: AuthenticationProps) {
           <div className="grid gap-2">
             <label htmlFor="username">Username</label>
             {mutation.isError &&
-              userErrCode.includes((mutation.error as AxiosStatusError).response?.data.errors[0].code) && (
+              userErrCode.has((mutation.error as AxiosStatusError).response?.data.errors[0].code) && (
                 <DisplayError message={(mutation.error as AxiosStatusError).response.data.errors[0].name} />
               )}
             <input
