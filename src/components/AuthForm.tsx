@@ -23,18 +23,21 @@ export default function AuthForm({ type }: AuthenticationProps) {
     }
   });
 
-  const onSubmit = useCallback((event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // @ts-ignore: Required field on the form
-    const username: string = event.target.username.value;
-    // @ts-ignore: Required field on the form
-    const password: string = event.target.password.value;
-    
-    mutation.mutateAsync({
-      username,
-      password
-    });
-  }, [mutation]);
+  const onSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      // @ts-ignore: Required field on the form
+      const username: string = event.target.username.value;
+      // @ts-ignore: Required field on the form
+      const password: string = event.target.password.value;
+
+      mutation.mutateAsync({
+        username,
+        password
+      });
+    },
+    [mutation]
+  );
 
   return (
     <div className="grid gap-6">
@@ -64,7 +67,7 @@ export default function AuthForm({ type }: AuthenticationProps) {
               <DisplayError
                 message={(mutation.error as AxiosStatusError).response.data.errors[0].name.issues[0].message}
               />
-              )}
+            )}
             <input
               className="input bg-zinc-800 border-gray-600 w-full focus:border-blue-700"
               id="password"
@@ -92,10 +95,10 @@ export default function AuthForm({ type }: AuthenticationProps) {
 }
 
 type MutationFnParam = {
-username: string;
-password: string;
+  username: string;
+  password: string;
 };
 
 interface ReturnObj {
-results: { success: boolean; token: string }[];
+  results: { success: boolean; token: string }[];
 }
