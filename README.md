@@ -10,7 +10,7 @@ The app by default runs on port `5173`.
 Clone the project
 
 ```bash
-git clone https://github.com/OneChatTeam/Client.git onechat
+git clone https://github.com/ChampionBuffalo1/OneChatClient.git onechat
 cd onechat
 ```
 
