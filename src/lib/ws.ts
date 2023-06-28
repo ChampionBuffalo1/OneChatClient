@@ -1,8 +1,6 @@
 let socket: WebSocket | undefined;
 
-type handler = (message: Record<string, unknown>) => void;
-
-const startWebsocket = (url: string, messageHandler: handler): void => {
+const startWebsocket = <T extends Record<string, unknown>>(url: string, messageHandler: (message: T) => void): void => {
   if (socket) return;
   socket = new WebSocket(url);
   socket.addEventListener('message', event => {
@@ -10,7 +8,7 @@ const startWebsocket = (url: string, messageHandler: handler): void => {
     messageHandler(jsonMessage);
   });
   socket.addEventListener('close', event => {
-    console.log('Websocket connection closed with reason: ' + event);
+    console.log('Websocket connection closed with reason: ' + event.reason);
     socket = undefined;
   });
 };
