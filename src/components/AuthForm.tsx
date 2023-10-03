@@ -5,8 +5,6 @@ import { AxiosStatusError } from '../typings';
 import { useMutation } from '@tanstack/react-query';
 import { AuthenticationProps } from '../pages/Authentication';
 
-const userErrCode = new Set([17, 19, 22]);
-
 export default function AuthForm({ type }: AuthenticationProps) {
   const mutation = useMutation({
     mutationKey: [type],
@@ -46,8 +44,9 @@ export default function AuthForm({ type }: AuthenticationProps) {
           <div className="grid gap-2">
             <label htmlFor="username">Username</label>
             {mutation.isError &&
-              userErrCode.has((mutation.error as AxiosStatusError).response?.data.errors[0].code) && (
-                <DisplayError message={(mutation.error as AxiosStatusError).response.data.errors[0].name} />
+              ((mutation.error as AxiosStatusError).response?.data.code === 19 ||
+                (mutation.error as AxiosStatusError).response?.data.code === 22) && (
+                <DisplayError message={(mutation.error as AxiosStatusError).response?.data.message} />
               )}
             <input
               className="input bg-zinc-800 border-gray-600 w-full focus:border-blue-700"
@@ -59,14 +58,13 @@ export default function AuthForm({ type }: AuthenticationProps) {
               required
             />
             <label htmlFor="password">Password</label>
-            {mutation.isError && (mutation.error as AxiosStatusError).response?.data.errors[0].code === 17 && (
-              <DisplayError message={(mutation.error as AxiosStatusError).response.data.errors[0].name} />
+            {mutation.isError && (mutation.error as AxiosStatusError).response?.data.code === 17 && (
+              <DisplayError message={(mutation.error as AxiosStatusError).response?.data.message} />
             )}
+
             {/* Zod Scheam Error */}
-            {mutation.isError && (mutation.error as AxiosStatusError).response?.data.errors[0].code === 204 && (
-              <DisplayError
-                message={(mutation.error as AxiosStatusError).response.data.errors[0].name.issues[0].message}
-              />
+            {mutation.isError && (mutation.error as AxiosStatusError).response?.data.code === 204 && (
+              <DisplayError message={(mutation.error as AxiosStatusError).response?.data.message.issues[0].message} />
             )}
             <input
               className="input bg-zinc-800 border-gray-600 w-full focus:border-blue-700"
@@ -78,8 +76,8 @@ export default function AuthForm({ type }: AuthenticationProps) {
             />
           </div>
 
-          {mutation.isError && (mutation.error as AxiosStatusError).response?.data.errors[0].code === 500 && (
-            <DisplayError message={(mutation.error as AxiosStatusError).response.data.errors[0].name} />
+          {mutation.isError && (mutation.error as AxiosStatusError).response?.data.scode === 500 && (
+            <DisplayError message={(mutation.error as AxiosStatusError).response?.data.sname} />
           )}
           {mutation.isError && (mutation.error as Error).message === 'Network Error' && (
             <DisplayError message="Network Error" />
