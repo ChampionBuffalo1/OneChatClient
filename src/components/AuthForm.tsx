@@ -16,7 +16,7 @@ export default function AuthForm({ type }: AuthenticationProps) {
       return data;
     },
     onSuccess: data => {
-      const { token } = data.results[0];
+      const { token } = data;
       localStorage.setItem('token', token);
     }
   });
@@ -98,5 +98,5 @@ type MutationFnParam = {
 };
 
 interface ReturnObj {
-  results: { success: boolean; token: string }[];
+  token: string;
 }
