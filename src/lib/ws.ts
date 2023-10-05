@@ -1,23 +1,37 @@
-let socket: WebSocket | undefined;
+class WebSocketUtil {
+  private static dispatch: boolean = false;
 
-const startWebsocket = <T extends Record<string, unknown>>(url: string, messageHandler: (message: T) => void): void => {
-  if (socket) return;
-  socket = new WebSocket(url);
-  socket.addEventListener('message', event => {
-    const jsonMessage = JSON.parse(event.data);
-    messageHandler(jsonMessage);
-  });
-  socket.addEventListener('close', event => {
-    console.log('Websocket connection closed with reason: ' + event.reason);
-    socket = undefined;
-  });
-};
+  static instance: WebSocket;
+  static getInstance(): WebSocket {
+    if (!WebSocketUtil.instance) {
+      WebSocketUtil.instance = new WebSocket('ws://localhost:3001/ws');
+    }
+    return WebSocketUtil.instance;
+  }
+  static send(value: Record<string, unknown>): void {
+    if (WebSocketUtil.dispatch) {
+      WebSocketUtil.getInstance().send(JSON.stringify(value));
+    }
+  }
+  static registerListener = (listener: (event: MessageEvent) => void, token: string): void => {
+    if (!WebSocketUtil.dispatch) {
+      WebSocketUtil.getInstance().addEventListener('open', () => {
+        this.send({
+          token
+        });
+      });
 
-const sendMessage = (message: string): void => socket?.send(JSON.stringify(message));
+      WebSocketUtil.getInstance().addEventListener('message', listener);
 
-const closeSocket = () => {
-  socket?.close();
-  socket = undefined;
-};
+      WebSocketUtil.getInstance().addEventListener('close', event => {
+        console.log('WebSocketUtil connection closed with reason: ' + event.reason);
+      });
+      WebSocketUtil.dispatch = true;
+    }
+  };
+  static close(): void {
+    if (WebSocketUtil.dispatch) WebSocketUtil.instance.close();
+  }
+}
 
-export { startWebsocket, sendMessage, closeSocket };
+export default WebSocketUtil;
