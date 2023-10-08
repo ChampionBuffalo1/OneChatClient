@@ -58,23 +58,25 @@ export default function Home() {
                 ))}
             </ul>
             {/* New Group Modal */}
-            <button onClick={() => setIsOpen(true)}>New Group</button>
+            <button onClick={() => setIsOpen(true)} className="btn mt-8">
+              New Group
+            </button>
             <div className="flex justify-center">
               <Modal
+                ariaHideApp={false}
                 isOpen={isOpen}
                 onRequestClose={() => setIsOpen(false)}
-                contentLabel="New Group"
                 style={{
                   content: {
+                    backgroundColor: 'black',
                     width: 'max-content',
                     height: 'max-content',
                     top: '30%',
-                    left: '40%',
-                    background: 'white'
+                    left: '40%'
                   },
                   overlay: {
                     opacity: '0.8',
-                    backgroundColor: 'gray'
+                    backgroundColor: 'black'
                   }
                 }}
               >
