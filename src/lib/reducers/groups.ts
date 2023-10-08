@@ -1,23 +1,51 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import message from './message';
 
+type MessageType = {
+  id: string;
+  content: string;
+  authorId: string;
+};
+
+type GroupType = {
+  name: string;
+  id: string;
+  messages: MessageType[];
+};
 export interface GroupStore {
-  value: string;
+  value: GroupType[];
 }
 
 const initialState: GroupStore = {
-  value: ''
+  value: []
 };
 
 export const GroupSlice = createSlice({
   name: 'group',
   initialState,
   reducers: {
-    setToken: (state, action: PayloadAction<string>) => {
-    //   state.value = action.payload;
+    addGroup: (state, action: PayloadAction<GroupType | GroupType[]>) => {
+      if (Array.isArray(action.payload)) {
+        state.value.push(...action.payload);
+      } else {
+        state.value.push(action.payload);
+      }
+    },
+    addMessage: (
+      state,
+      action: PayloadAction<{
+        id: string;
+        message: MessageType;
+      }>
+    ) => {
+      const index = state.value.findIndex(group => group.id === action.payload.id);
+      if (index != -1) {
+        state.value[index].messages.push(action.payload.message);
+      }
     }
   }
 });
 
-export const { setToken } = GroupSlice.actions;
+export const { addGroup, addMessage } = GroupSlice.actions;
 
 export default GroupSlice.reducer;
