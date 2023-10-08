@@ -4,24 +4,26 @@ import { axiosInstance } from '../lib/api';
 import { AxiosStatusError } from '../typings';
 import { useMutation } from '@tanstack/react-query';
 import { AuthenticationProps } from '../pages/Authentication';
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate } from 'react-router-dom';
 
 export default function AuthForm({ type }: AuthenticationProps) {
   const navigate = useNavigate();
   const mutation = useMutation({
     mutationKey: [type],
     mutationFn: async ({ username, password }: MutationFnParam) => {
-      const { data } = await axiosInstance.post<ReturnObj>('/' + type, {
-        username,
-        password
-      });
+      const { data } = await axiosInstance.post<ReturnObj>(
+        '/' + type,
+        JSON.stringify({
+          username,
+          password
+        })
+      );
       return data;
     },
     onSuccess: data => {
       const { token } = data;
       localStorage.setItem('token', token);
-      navigate("/home");
+      navigate('/home');
     }
   });
 
