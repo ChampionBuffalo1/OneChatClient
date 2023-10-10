@@ -15,7 +15,6 @@ export default function Home() {
   const [showGroup, setShowGroup] = useState('');
   const dispatch = useAppDispatch();
 
-  const data = useAppSelector(state => state.groups.value);
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -41,18 +40,14 @@ export default function Home() {
               value={searchKey}
               onChange={event => setSearchKey(event.target.value)}
             />
-            <ul className="space-y-4">
+            <ul className="space-y-2">
               {group
                 .filter(g => (searchKey ? g.name.toLowerCase().startsWith(searchKey) : true))
                 .map(group => (
                   <li key={group.id}>
-                    <button
-                      className="space-x-2 text-lg"
-                      onClick={() => {
-                        setShowGroup(group.id);
-                      }}
-                    >
-                      <GroupIcon name={group.name} recentMessage="Loading..." />
+                    <button className="text-lg w-full" onClick={() => setShowGroup(group.id)}>
+                      {/* TODO: Get recent message from the message array in the group */}
+                      <GroupIcon name={group.name} recentMessage="User: This is a normal message" />
                     </button>
                   </li>
                 ))}
@@ -68,6 +63,7 @@ export default function Home() {
                 onRequestClose={() => setIsOpen(false)}
                 style={{
                   content: {
+                    border: "none",
                     backgroundColor: 'black',
                     width: 'max-content',
                     height: 'max-content',
@@ -75,8 +71,7 @@ export default function Home() {
                     left: '40%'
                   },
                   overlay: {
-                    opacity: '0.8',
-                    backgroundColor: 'black'
+                    backgroundColor: 'rgb(0, 0, 30, 0.8)'
                   }
                 }}
               >
@@ -85,13 +80,12 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="flex-1 p-4 bg-gray-800">
-          <pre>{JSON.stringify(data, undefined, 2)}</pre>
+        <div className="flex-1 bg-gray-800">
           {!showGroup && (
-            <>
-              <h1 className="text-3xl font-bold mb-4">Welcome to the Chat Application!</h1>
+            <div className='p-4'>
+              <h1 className="text-3xl font-bold mb-4">Welcome to OneChat!</h1>
               <p>This is the content area where the chat will be displayed.</p>
-            </>
+            </div>
           )}
           {showGroup && <Group id={showGroup} />}
         </div>
