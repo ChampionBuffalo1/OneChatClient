@@ -1,10 +1,13 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import message from './message';
 
-type MessageType = {
+export type MessageType = {
   id: string;
   content: string;
-  authorId: string;
+  author: {
+    id: string;
+    username: string;
+    avatarUrl: string;
+  };
 };
 
 type GroupType = {
