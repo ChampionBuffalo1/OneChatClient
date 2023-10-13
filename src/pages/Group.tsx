@@ -13,21 +13,32 @@ export default function Group({ id }: { id: string }) {
 
   // TODO: Complete this
   const mutation = useMutation({
-    mutationFn: async (): Promise<Record<string, string>> => {
+    mutationFn: async () => {
       const { data } = await axiosInstance.post(
-        '/group/message',
+        `/group/${id}/messages/create`,
         JSON.stringify({
-          groupId: id,
-          content: messageState
+          text: messageState
         })
       );
+      setMessageState('');
       return data;
     },
-    onSuccess: ({ data }) => {
-      
-      dispatch(addMessage(data));
+    onSuccess: ({
+      message
+    }: {
+      message: {
+        id: string;
+        text: string;
+      };
+    }) => {
+      dispatch(
+        addMessage({
+          id,
+          message
+        })
+      );
     },
-    onError: error => {
+    onError: (error: unknown) => {
       console.log(error);
     }
   });
@@ -54,6 +65,12 @@ export default function Group({ id }: { id: string }) {
           id="message"
           value={messageState}
           className="w-full input outline-none"
+          onKeyDown={e => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              mutation.mutateAsync();
+            }
+          }}
           onChange={e => {
             setMessageState(e.target.value);
           }}
