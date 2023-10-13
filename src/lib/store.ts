@@ -1,10 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import messageSlice from './reducers/message';
 import groupSlice from './reducers/groups';
 
 export const reduxStore = configureStore({
   reducer: {
-    messages: messageSlice,
     groups: groupSlice
   }
 });
