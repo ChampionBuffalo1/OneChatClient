@@ -36,11 +36,7 @@ export default function GroupForm({ close }: { close: () => void }) {
     <div className="flex flex-col items-center text-white">
       <h1 className="py-8">Customize your Group</h1>
       <div className="flex items-center justify-center">
-        <form
-          method="post"
-          onSubmit={mutation.mutateAsync}
-          className="flex flex-col"
-        >
+        <form method="post" onSubmit={mutation.mutateAsync} className="flex flex-col">
           <label htmlFor="name" className="label">
             Group Name
           </label>
