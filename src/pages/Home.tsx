@@ -12,10 +12,11 @@ import { useAppDispatch, useAppSelector } from '../lib/hooks';
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
   const [joinOpen, setJoinOpen] = useState(false);
-  const group = useAppSelector(state => state.groups.value);
   const [searchKey, setSearchKey] = useState('');
   const [showGroup, setShowGroup] = useState('');
   const dispatch = useAppDispatch();
+
+  const group = useAppSelector(state => state.groups.value);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -48,9 +49,14 @@ export default function Home() {
                 .map(group => {
                   return (
                     <li key={group.id}>
-                      <button className="text-lg w-full" onClick={() => setShowGroup(group.id)}>
+                      <button className="text-lg w-full">
                         {/* TODO: Get recent message from the message array in the group */}
-                        <GroupIcon name={group.name} recentMessage="User: This is a normal message" />
+                        <GroupIcon
+                          id={group.id}
+                          name={group.name}
+                          lastMsg={group.messages[group.messages.length - 1].text || ''}
+                          onClick={() => setShowGroup(group.id)}
+                        />
                       </button>
                     </li>
                   );
