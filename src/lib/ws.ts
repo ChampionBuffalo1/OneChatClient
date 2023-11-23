@@ -16,7 +16,7 @@ class WebSocketUtil {
   static registerListener = (listener: (event: MessageEvent) => void, token: string): void => {
     if (!WebSocketUtil.dispatch) {
       WebSocketUtil.getInstance().addEventListener('open', () => {
-        this.send({
+        WebSocketUtil.send({
           token
         });
       });

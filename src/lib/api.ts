@@ -6,7 +6,7 @@ export const axiosInstance = axios.create({
   transformRequest: [
     (data, header) => {
       const token = localStorage.getItem('token');
-      header.set('Content-Type', 'application/json');
+      header.set('Content-Type', 'application/json; charset=utf-8');
       if (token) header.set('Authorization', `Bearer ${token}`);
       return data;
     }
