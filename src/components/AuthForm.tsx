@@ -1,10 +1,10 @@
-import { useCallback } from 'react';
 import DisplayError from './Error';
+import { useCallback } from 'react';
 import { axiosInstance } from '../lib/api';
 import { AxiosStatusError } from '../typings';
+import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { AuthenticationProps } from '../pages/Authentication';
-import { useNavigate } from 'react-router-dom';
 
 export default function AuthForm({ type }: AuthenticationProps) {
   const navigate = useNavigate();
@@ -60,7 +60,7 @@ export default function AuthForm({ type }: AuthenticationProps) {
               placeholder="coolguy"
               type="text"
               autoComplete="text"
-              disabled={mutation.isLoading}
+              disabled={mutation.isPending}
               required
             />
             <label htmlFor="password">Password</label>
@@ -77,7 +77,7 @@ export default function AuthForm({ type }: AuthenticationProps) {
               id="password"
               type="password"
               minLength={8}
-              disabled={mutation.isLoading}
+              disabled={mutation.isPending}
               required
             />
           </div>
@@ -88,8 +88,8 @@ export default function AuthForm({ type }: AuthenticationProps) {
           {mutation.isError && (mutation.error as Error).message === 'Network Error' && (
             <DisplayError message="Network Error" />
           )}
-          <button className="btn btn-primary bg-blue-700 hover:bg-blue-800" disabled={mutation.isLoading}>
-            {mutation.isLoading && <span className="loading loading-spinner"></span>}
+          <button className="btn btn-primary bg-blue-700 hover:bg-blue-800" disabled={mutation.isPending}>
+            {mutation.isPending && <span className="loading loading-spinner"></span>}
             {type === 'login' ? 'Login' : 'Signup'}
           </button>
         </div>
