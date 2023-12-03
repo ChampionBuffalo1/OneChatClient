@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
 import JoinGroup from '../components/JoinGroup';
 import GroupIcon from '../components/GroupIcon';
-import GroupForm from '../components/GroupForm';
+import CreateForm from '../components/CreateForm';
 import { addGroup } from '../lib/reducers/groups';
 import { useAppDispatch, useAppSelector } from '../lib/hooks';
 
@@ -54,7 +54,7 @@ export default function Home() {
                         <GroupIcon
                           id={group.id}
                           name={group.name}
-                          lastMsg={group.messages[group.messages.length - 1].text || ''}
+                          lastMsg={group.messages?.[group.messages.length - 1]?.text}
                           onClick={() => setShowGroup(group.id)}
                         />
                       </button>
@@ -65,13 +65,14 @@ export default function Home() {
             {/* New Group Modal */}
             <div className="flex justify-between mx-2 mt-5">
               <button onClick={() => setIsOpen(true)} className="btn">
-                New Group
+                Create Group
               </button>
               <button onClick={() => setJoinOpen(true)} className="btn">
                 Join Group
               </button>
             </div>
             <div className="flex justify-center">
+              {/* Modal background (Shared across both modals) */}
               <Modal
                 ariaHideApp={false}
                 isOpen={isOpen || joinOpen}
@@ -93,8 +94,8 @@ export default function Home() {
                   }
                 }}
               >
-                {isOpen && <GroupForm close={() => setIsOpen(false)} />}
-                {joinOpen && <JoinGroup />}
+                {isOpen && <CreateForm close={() => setIsOpen(false)} />}
+                {joinOpen && <JoinGroup close={() => setJoinOpen(false)} />}
               </Modal>
             </div>
           </div>
