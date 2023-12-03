@@ -26,7 +26,7 @@ export default function Home() {
         if (groupData.data) dispatch(addGroup(groupData.data));
       }, token);
     }
-  }, []);
+  }, [dispatch]);
 
   return (
     <>

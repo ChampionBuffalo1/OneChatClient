@@ -1,8 +1,9 @@
-import { FormEvent, useRef, useState } from 'react';
+import { AxiosError } from 'axios';
 import { axiosInstance } from '../lib/api';
 import { useAppDispatch } from '../lib/hooks';
 import { addGroup } from '../lib/reducers/groups';
 import { useMutation } from '@tanstack/react-query';
+import { FormEvent, useRef, useState } from 'react';
 
 export default function GroupForm({ close }: { close: () => void }) {
   const name = useRef('');
@@ -19,9 +20,9 @@ export default function GroupForm({ close }: { close: () => void }) {
       );
       return data;
     },
-    onError: (err: any) => {
+    onError: (err: AxiosError) => {
       if (err.response) {
-        setError(err.response.data.message);
+        setError((err.response.data as { message: string }).message);
       } else {
         setError(err.message);
       }

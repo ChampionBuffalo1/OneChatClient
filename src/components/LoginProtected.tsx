@@ -10,10 +10,10 @@ const ProtectedRoute = ({ component: Component }: ProtectedRouteProps) => {
   const navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/');
-    } else {
+    if (token) {
       setRender(true);
+    } else {
+      navigate('/');
     }
   }, [navigate]);
   return <>{render ? <Component /> : <></>}</>;

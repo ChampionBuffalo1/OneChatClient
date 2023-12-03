@@ -25,7 +25,7 @@ export default function GroupIcon({ id, icon, name, lastMsg, onClick }: GroupIco
           </div>
           {lastMsg && (
             <p className="text-gray-400 mx-2">
-              {lastMsg.substring(0, CHAR_LIMIT) + (lastMsg.length > CHAR_LIMIT ? '...' : '')}
+              {lastMsg.slice(0, CHAR_LIMIT) + (lastMsg.length > CHAR_LIMIT ? '...' : '')}
             </p>
           )}
         </div>

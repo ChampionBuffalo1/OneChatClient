@@ -30,9 +30,9 @@ export default function AuthForm({ type }: AuthenticationProps) {
   const onSubmit = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      // @ts-ignore: Required field on the form
+      // @ts-expect-error: Too lazy to type things
       const username: string = event.target.username.value;
-      // @ts-ignore: Required field on the form
+      // @ts-expect-error: Too lazy to type things
       const password: string = event.target.password.value;
 
       mutation.mutateAsync({
