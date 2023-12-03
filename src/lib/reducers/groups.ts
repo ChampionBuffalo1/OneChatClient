@@ -1,8 +1,10 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
+const MAX_MESSAGE_PER_GROUP = 100;
+
 export type MessageType = {
   id: string;
-  content: string;
+  text: string;
   author: {
     id: string;
     username: string;
@@ -14,6 +16,10 @@ type GroupType = {
   name: string;
   id: string;
   messages: MessageType[];
+  owner: {
+    id: string;
+    username: string;
+  };
 };
 export interface GroupStore {
   value: GroupType[];
@@ -34,6 +40,11 @@ export const GroupSlice = createSlice({
         state.value.push(action.payload);
       }
     },
+    removeGroup: (state, action: PayloadAction<string>) => {
+      const index = state.value.findIndex(group => group.id === action.payload);
+      if (index === -1) return;
+      state.value.splice(index, 1);
+    },
     addMessage: (
       state,
       action: PayloadAction<{
@@ -42,13 +53,18 @@ export const GroupSlice = createSlice({
       }>
     ) => {
       const index = state.value.findIndex(group => group.id === action.payload.id);
-      if (index != -1) {
-        state.value[index].messages.push(action.payload.message);
+      if (index === -1) return;
+      const messages = state.value[index].messages;
+      if (messages.length >= MAX_MESSAGE_PER_GROUP) {
+        // Assuming the messages are sorted by time
+        // Removing the oldest message from store to keep memory usage down
+        messages.shift();
       }
+      messages.push(action.payload.message);
     }
   }
 });
 
-export const { addGroup, addMessage } = GroupSlice.actions;
+export const { addGroup, addMessage,removeGroup } = GroupSlice.actions;
 
 export default GroupSlice.reducer;
