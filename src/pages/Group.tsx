@@ -47,7 +47,7 @@ export default function Group({ id }: { id: string }) {
 
   return (
     <div className="flex flex-col h-full">
-      <GroupHeader title={group.name} />
+      <GroupHeader title={group.name} id={group.id} />
 
       <div className="flex-grow overflow-auto mt-12">
         {/* TODO: Add pagination support once the oldest message has been read */}
@@ -80,7 +80,7 @@ export default function Group({ id }: { id: string }) {
           onClick={() => {
             mutation.mutateAsync();
           }}
-          disabled={!messageState || mutation.isLoading}
+          disabled={!messageState || mutation.isPending}
         >
           <Send className="mx-4 w-fit" size={28} />
         </button>
