@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+// `import.meta.env` will put the env's value at build time into the dist
+const host = import.meta.env.VITE_API_HOST || 'http://localhost:3000';
+
 export const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3001/api/v1',
+  baseURL: host + '/api/v1',
   maxRedirects: 2,
   transformRequest: [
     (data, header) => {
