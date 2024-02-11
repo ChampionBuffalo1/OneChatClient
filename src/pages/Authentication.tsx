@@ -24,7 +24,7 @@ export default function Authentication({ type }: AuthenticationProps) {
         <title>OneChat - {isLogin ? 'Log in' : 'Sign Up'}</title>
       </Helmet>
       <div
-        className="container relative hidden flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0"
+        className="bg-primary text-primary-foreground container relative hidden flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0"
         style={{
           height: '100vh'
         }}
@@ -50,7 +50,7 @@ export default function Authentication({ type }: AuthenticationProps) {
               </p>
             </div>
             <AuthForm type={type} />
-            <p className="px-8 text-center text-md text-muted-foreground link">
+            <p className="p-2 bg-zinc-800 text-center text-md rounded-md blur:bg-zinc-400">
               <Link to={'/' + (isLogin ? 'signup' : 'login')}>{isLogin ? "Don't" : 'Already'} have a account?</Link>
             </p>
           </div>
