@@ -118,6 +118,7 @@ export default function AuthorizationForm({ type }: AuthenticationProps) {
                   placeholder="Password"
                   disabled={mutation.isPending}
                   className="bg-zinc-700 border-gray-600 focus:border-blue-700"
+                  onChangeCapture={() => { if (credError) setCredError(''); }}
                   {...field}
                 />
               </FormControl>
