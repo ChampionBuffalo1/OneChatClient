@@ -1,6 +1,7 @@
 import { z } from 'zod';
-import { toast } from 'react-toastify';
 import type { AxiosError } from 'axios';
+import { ToastAction } from './ui/toast';
+import { useToast } from './ui/use-toast';
 import { useForm } from 'react-hook-form';
 import { axiosInstance } from '../lib/api';
 import { useCallback, useState } from 'react';
@@ -21,6 +22,7 @@ const formSchema = z.object({
 });
 
 export default function AuthorizationForm({ type }: AuthenticationProps) {
+  const { toast } = useToast();
   const [credError, setCredError] = useState<string>('');
   const form = useForm<formSchema>({
     resolver: zodResolver(formSchema),
@@ -48,9 +50,23 @@ export default function AuthorizationForm({ type }: AuthenticationProps) {
       localStorage.setItem('user', JSON.stringify(data.content.data));
       navigate('/home');
     },
-    onError: (error: AxiosError<Omit<ApiResponse, 'content'>>) => {
+    onError: (error: AxiosError<Omit<ApiResponse, 'content'>>, { username, password }) => {
       if (error.message === 'Network Error') {
-        toast.error('Network Error!');
+        toast({
+          variant: 'destructive',
+          title: 'Uh oh! Something went wrong.',
+          description: 'There was a problem with your request.',
+          action: (
+            <ToastAction
+              onClick={() => {
+                mutation.mutateAsync({ username, password });
+              }}
+              altText="Try again"
+            >
+              Try again
+            </ToastAction>
+          )
+        });
         return;
       }
       if (!error.response) return;
@@ -118,7 +134,9 @@ export default function AuthorizationForm({ type }: AuthenticationProps) {
                   placeholder="Password"
                   disabled={mutation.isPending}
                   className="bg-zinc-700 border-gray-600 focus:border-blue-700"
-                  onChangeCapture={() => { if (credError) setCredError(''); }}
+                  onChangeCapture={() => {
+                    if (credError) setCredError('');
+                  }}
                   {...field}
                 />
               </FormControl>
