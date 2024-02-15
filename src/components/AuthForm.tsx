@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { Input } from './ui/input';
+import { Button } from './ui/button';
 import type { AxiosError } from 'axios';
 import { ToastAction } from './ui/toast';
 import { useToast } from './ui/use-toast';
@@ -9,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AuthenticationProps } from '../pages/Authentication';
-import { Input, Button, Form, FormItem, FormLabel, FormField, FormControl, FormMessage } from '@/components/ui';
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from './ui/form';
 
 const formSchema = z.object({
   username: z
