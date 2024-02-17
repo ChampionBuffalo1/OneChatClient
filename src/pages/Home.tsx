@@ -14,7 +14,7 @@ export default function Home() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     dispatch(setUser(user));
     // TODO: connect to websocket and handle events
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
