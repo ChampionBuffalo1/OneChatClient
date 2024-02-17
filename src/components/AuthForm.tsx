@@ -60,10 +60,9 @@ export default function AuthorizationForm({ type }: AuthenticationProps) {
           description: 'There was a problem with your request.',
           action: (
             <ToastAction
-              onClick={() => {
-                mutation.mutateAsync({ username, password });
-              }}
               altText="Try again"
+              onClick={() => mutation.mutateAsync({ username, password })}
+              className="rounded-lg hover:bg-red-400 border border-gray-200 p-2"
             >
               Try again
             </ToastAction>
