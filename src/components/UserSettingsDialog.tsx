@@ -37,8 +37,8 @@ import {
 } from './ui/alert-dialog';
 
 const formSchema = z.object({
-  username: z.string().min(1, 'Username must be at least 1 character.').optional(),
-  password: z.string().min(8, 'Password must be at least 8 characters.').optional()
+  username: z.string().optional(),
+  password: z.string().optional()
 });
 
 export default function UserSettingsDialog() {
@@ -68,7 +68,7 @@ export default function UserSettingsDialog() {
       localStorage.setItem('user', JSON.stringify({ ...old, username: data.content.data.username }));
       dispatch(updateUsername(data.content.data.username));
     },
-    onError: (error: AxiosError<ApiError<'username'>>, variables) => {
+    onError: (error: AxiosError<ApiError<'username' | 'password'>>, variables) => {
       if (error.message === 'Network Error') {
         toast({
           variant: 'destructive',
@@ -88,9 +88,7 @@ export default function UserSettingsDialog() {
       }
       if (!error.response) return;
       for (const eor of error.response?.data.errors) {
-        if (eor.param === 'username') {
-          form.setError('username', { message: eor.message });
-        }
+        form.setError(eor.param, { message: eor.message });
       }
     }
   });
