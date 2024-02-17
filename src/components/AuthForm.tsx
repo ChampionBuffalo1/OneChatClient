@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
+import { ApiError } from '@/typings';
 import type { AxiosError } from 'axios';
 import { ToastAction } from './ui/toast';
 import { useToast } from './ui/use-toast';
@@ -47,12 +48,12 @@ export default function AuthorizationForm({ type }: AuthenticationProps) {
       );
       return data;
     },
-    onSuccess: (data: Omit<ApiResponse, 'errors'>) => {
+    onSuccess: (data: ApiResponse) => {
       localStorage.setItem('token', data.content.meta.access_token);
       localStorage.setItem('user', JSON.stringify(data.content.data));
       navigate('/home');
     },
-    onError: (error: AxiosError<Omit<ApiResponse, 'content'>>, { username, password }) => {
+    onError: (error: AxiosError<ApiError<'username' | 'password'>>, { username, password }) => {
       if (error.message === 'Network Error') {
         toast({
           variant: 'destructive',
@@ -162,7 +163,6 @@ export default function AuthorizationForm({ type }: AuthenticationProps) {
 }
 
 type formSchema = z.infer<typeof formSchema>;
-// the errors and content fields are mutually exclusive
 type ApiResponse = {
   content: {
     data: {
@@ -175,9 +175,4 @@ type ApiResponse = {
       access_token: string;
     };
   };
-  errors: {
-    param: 'username' | 'password';
-    code: string;
-    message: string;
-  }[];
 };
