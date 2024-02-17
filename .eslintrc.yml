@@ -1,12 +1,13 @@
 root: true
 parser: '@typescript-eslint/parser'
+# Ignore shadcn files
+ignorePatterns: ['**/ui/*.ts', '**/ui/*.tsx']
 extends:
   - prettier
   - eslint:recommended
   - plugin:react/recommended
   - plugin:react/jsx-runtime
   - plugin:unicorn/recommended
-  - plugin:security/recommended
   - plugin:react-hooks/recommended
   - plugin:@typescript-eslint/recommended
   - plugin:@typescript-eslint/eslint-recommended
@@ -14,6 +15,7 @@ settings:
   react:
     version: 18.x
 rules:
+  react/prop-types: off
   unicorn/filename-case: off
   unicorn/prevent-abbreviations: off
   # no-restricted-imports: off
