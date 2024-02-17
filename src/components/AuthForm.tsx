@@ -74,8 +74,7 @@ export default function AuthorizationForm({ type }: AuthenticationProps) {
       if (!error.response) return;
       const isRootError = error.response.data.errors.find(err => !err.param);
       if (isRootError) {
-        // TODO: Figure out why the message still contains quotes
-        setCredError(isRootError.message.replaceAll("'", ''));
+        setCredError(isRootError.message);
         return;
       }
       for (const err of error.response.data.errors) {
