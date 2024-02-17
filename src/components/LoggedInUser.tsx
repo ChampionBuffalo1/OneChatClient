@@ -17,7 +17,7 @@ export default function LoggedInUser() {
         <Avatar>
           <AvatarImage src={user.avatarUrl} />
           <AvatarFallback className="bg-[#d7a3ff] text-[#5f129b] text-lg">
-            {user.username.charAt(0).toUpperCase()}
+            {user.username?.charAt(0).toUpperCase()}
           </AvatarFallback>
         </Avatar>
       </div>
