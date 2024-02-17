@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import debounce from 'debounce';
 import { Input } from './ui/input';
 import { Plus } from 'lucide-react';
 import { Button } from './ui/button';
@@ -6,6 +6,7 @@ import LoggedInUser from './LoggedInUser';
 import { Separator } from './ui/separator';
 import { useAppSelector } from '@/lib/hooks';
 import { ScrollArea } from './ui/scroll-area';
+import { useCallback, useState } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 
 type ISideBar = {
@@ -15,6 +16,12 @@ type ISideBar = {
 export default function GroupSidebar({ selectHandler }: ISideBar) {
   const [searchKey, setSearchKey] = useState('');
   const groups = useAppSelector(state => state.groups.value);
+  const onChangeHandler = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchKey(event.target.value);
+    },
+    [setSearchKey]
+  );
 
   return (
     <div className="w-[18%] border-r-[1px] border-r-gray-100 overflow-hidden">
@@ -22,7 +29,9 @@ export default function GroupSidebar({ selectHandler }: ISideBar) {
         <>
           <LoggedInUser />
           <div className="flex items-center gap-2 px-4 mt-4 text-primary">
-            <Button className="flex-1" variant="secondary"> Join Group </Button>
+            <Button className="flex-1" variant="secondary">
+              Join Group
+            </Button>
             <Button className="flex-1" variant="secondary">
               <Plus className="mr-2" size={18} /> Create Group
             </Button>
@@ -32,7 +41,7 @@ export default function GroupSidebar({ selectHandler }: ISideBar) {
               className="w-full"
               placeholder="Search groups"
               type="search"
-              onChange={event => setSearchKey(event.target.value)}
+              onChange={debounce(onChangeHandler, 400)}
             />
           </div>
         </>
