@@ -27,16 +27,16 @@ export default function LogoutAlert() {
       <AlertDialogContent className="bg-slate-800 text-primary-foreground">
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogDescription className='text-white'>
             Are you sure you want to logout? You will need to log back in to access your account.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel className="text-black hover:bg-slate-300">Cancel</AlertDialogCancel>
           <AlertDialogAction
-            className="bg-slate-900 hover:bg-slate-500"
+            className="bg-red-500 hover:bg-slate-600"
             onClick={() => {
-              localStorage.clear(); 
+              localStorage.clear();
               // Clear the redux state later
               navigate(0); // Refreshes the page
             }}

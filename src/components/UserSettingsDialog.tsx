@@ -226,7 +226,7 @@ export default function UserSettingsDialog() {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel className="text-black hover:bg-slate-300">Cancel</AlertDialogCancel>
-                <AlertDialogAction className="bg-red-500 hover:bg-slate-500" onClick={() => deletation.mutateAsync()}>
+                <AlertDialogAction className="bg-red-500 hover:bg-slate-600" onClick={() => deletation.mutateAsync()}>
                   Continue
                 </AlertDialogAction>
               </AlertDialogFooter>
