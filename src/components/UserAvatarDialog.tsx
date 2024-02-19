@@ -75,7 +75,7 @@ export default function UserAvatarDialog({ avatarUrl, placeholder, dialogOpen, s
     >
       <DialogContent className="sm:max-w-[425px] bg-slate-800 text-primary-foreground">
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle>Change Avatar</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col">
           <div className="flex items-center justify-center">

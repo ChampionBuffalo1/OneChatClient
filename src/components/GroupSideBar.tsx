@@ -6,15 +6,19 @@ import LoggedInUser from './LoggedInUser';
 import { Separator } from './ui/separator';
 import { useAppSelector } from '@/lib/hooks';
 import { ScrollArea } from './ui/scroll-area';
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
+import GroupActionDialog from './GroupActionDialog';
 
 type ISideBar = {
   selectHandler: (groupId: string) => void;
 };
 
 export default function GroupSidebar({ selectHandler }: ISideBar) {
+  const [open, setOpen] = useState(false);
   const [searchKey, setSearchKey] = useState('');
+  const contentKeyRef = useRef<'join' | 'create'>();
+
   const groups = useAppSelector(state => state.groups.value);
   const onChangeHandler = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,10 +33,24 @@ export default function GroupSidebar({ selectHandler }: ISideBar) {
         <>
           <LoggedInUser />
           <div className="flex items-center gap-2 px-4 mt-4 text-primary">
-            <Button className="flex-1" variant="secondary">
+            <Button
+              className="flex-1"
+              variant="secondary"
+              onClick={() => {
+                contentKeyRef.current = 'join';
+                setOpen(true);
+              }}
+            >
               Join Group
             </Button>
-            <Button className="flex-1" variant="secondary">
+            <Button
+              className="flex-1"
+              variant="secondary"
+              onClick={() => {
+                contentKeyRef.current = 'create';
+                setOpen(true);
+              }}
+            >
               <Plus className="mr-2" size={18} /> Create Group
             </Button>
           </div>
@@ -52,12 +70,12 @@ export default function GroupSidebar({ selectHandler }: ISideBar) {
               .map(group => (
                 <div
                   key={group.id}
-                  className="hover:cursor-pointer hover:bg-gray-500"
+                  className="group hover:cursor-pointer hover:bg-gray-500"
                   onClick={() => selectHandler(group.id)}
                 >
                   <div className="p-2 flex items-center gap-4">
                     <Avatar>
-                      <AvatarImage src={group.icon} />
+                      <AvatarImage src={group.iconUrl} />
                       <AvatarFallback className="bg-[#d7a3ff] text-[#5f129b] text-lg">
                         {group.name.charAt(0).toUpperCase()}
                       </AvatarFallback>
@@ -65,7 +83,7 @@ export default function GroupSidebar({ selectHandler }: ISideBar) {
                     <div className="flex items-center gap-2">
                       <div>
                         <span className="font-medium">{group.name}</span>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">{group.description || ''}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 group-hover:text-gray-300">{group.description || ''}</p>
                       </div>
                     </div>
                   </div>
@@ -75,6 +93,8 @@ export default function GroupSidebar({ selectHandler }: ISideBar) {
           </ScrollArea>
         </div>
       </nav>
+
+      <GroupActionDialog setOpen={setOpen} open={open} status={contentKeyRef.current!} />
     </div>
   );
 }

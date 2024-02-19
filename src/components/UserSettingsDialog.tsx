@@ -63,7 +63,8 @@ export default function UserSettingsDialog() {
       return data;
     },
     onSuccess: data => {
-      if (!data) return;
+      // Only if username was changed
+      if (!data?.content.data.username) return;
       const old = JSON.parse(localStorage.getItem('user') || '');
       localStorage.setItem('user', JSON.stringify({ ...old, username: data.content.data.username }));
       dispatch(updateUsername(data.content.data.username));
