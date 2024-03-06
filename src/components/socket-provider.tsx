@@ -3,7 +3,8 @@ import { useRef, useState, useEffect, createContext, type ReactNode, useCallback
 type SockerProviderProps = {
   children: ReactNode;
 };
-type Listener = (...args: unknown[]) => void;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Listener = (...args: any[]) => void;
 
 type SocketContextType = {
   socket?: WebSocket | undefined;
@@ -66,7 +67,7 @@ export function SocketProvider({ children }: SockerProviderProps) {
           return;
         }
         handler(json.d);
-      } catch (error) {
+      } catch {
         // TODO: Handle Invalid JSON
       }
     };

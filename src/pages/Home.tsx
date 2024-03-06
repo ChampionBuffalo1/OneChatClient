@@ -26,7 +26,7 @@ export default function Home() {
     const token = localStorage.getItem('token');
     if (token) {
       socket.registerEvent('USER_AUTH_INIT', () => {
-        socket.sendMessage({ token: 'oki' });
+        socket.sendMessage({ token });
         socket.registerEvent('USER_META_DATA', (data: Record<string, unknown>) => {
           // TODO: Finish this
           console.debug('We got the metadata:', data);
