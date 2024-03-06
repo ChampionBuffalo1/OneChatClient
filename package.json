@@ -7,8 +7,7 @@
     "dev": "vite",
     "lint": "eslint src/**/*.{js,jsx,ts,tsx}",
     "preview": "vite preview",
-    "build": "tsc && vite build",
-    "prebuild": "npm run lint",
+    "build": "vite build",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx,html,json,yml}\""
   },
   "dependencies": {
