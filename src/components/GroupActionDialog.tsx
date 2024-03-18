@@ -67,9 +67,12 @@ export default function GroupActionDialog({ open, setOpen, status }: IActionDial
             </ToastAction>
           )
         });
-        if (!error.response) return;
-        for (const err of error.response.data.errors) {
-          // NOTE: This might cause some bug later on
+        return;
+      }
+
+      if (!error.response) return;
+      for (const err of error.response.data.errors) {
+        if (err.param === 'name') {
           form.setError('name', { message: err.message });
         }
       }
