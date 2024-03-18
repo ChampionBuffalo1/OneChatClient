@@ -1,16 +1,15 @@
+import SocketEventHandler from './SocketEventHandler';
 import { useRef, useState, useEffect, createContext, type ReactNode, useCallback } from 'react';
 
-type SockerProviderProps = {
-  children: ReactNode;
-};
+type SockerProviderProps = { children: ReactNode };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Listener = (...args: any[]) => void;
+type Listener = (data: any) => void;
 
 type SocketContextType = {
   socket?: WebSocket | undefined;
-  registerEvent: (eventName: string, listener: Listener) => void;
-  removeEvent: (eventName: string) => boolean;
   sendMessage: (data: Record<string, unknown>) => void;
+  removeEvent: (eventName: SocketPayload['op']) => boolean;
+  registerEvent: (eventName: SocketPayload['op'], listener: Listener) => void;
 };
 
 export const SocketContext = createContext<SocketContextType>({
@@ -55,12 +54,9 @@ export function SocketProvider({ children }: SockerProviderProps) {
 
     const eventHandler = ({ data }: MessageEvent) => {
       try {
-        // TODO: Finish type
-        const json = JSON.parse(data) as {
-          op: string;
-          d: Record<string, unknown>;
-        };
+        const json = JSON.parse(data) as SocketPayload;
         const handler = eventMap.current.get(json.op);
+        // TODO: Remove debug log once finished testing
         console.debug(json, handler);
         if (!handler) {
           console.debug('No event handler for event: %s', json.op);
@@ -89,13 +85,35 @@ export function SocketProvider({ children }: SockerProviderProps) {
       value={{
         socket,
         sendMessage,
-        registerEvent: (eventName: string, listener: Listener) => {
-          eventMap.current.set(eventName, listener);
-        },
-        removeEvent: (eventName: string) => eventMap.current.delete(eventName)
+        removeEvent: eventName => eventMap.current.delete(eventName),
+        registerEvent: (eventName, listener) => eventMap.current.set(eventName, listener)
       }}
     >
+      <SocketEventHandler />
       {children}
     </SocketContext.Provider>
   );
 }
+
+type SocketPayload = {
+  op:
+    | 'GROUP_JOIN'
+    | 'GROUP_LEAVE'
+    | 'ICON_CHANGE'
+    | 'GROUP_DELETE'
+    | 'MESSAGE_EDIT'
+    | 'USER_METADATA'
+    | 'INVALID_SCHEMA'
+    | 'MESSAGE_CREATE'
+    | 'MESSAGE_DELETE'
+    | 'USER_AUTH_INIT'
+    | 'USER_AUTH_FAILURE';
+  d: {
+    group: {
+      id: string;
+      name?: string;
+      iconUrl?: string | null;
+      description?: string | null;
+    };
+  };
+};
