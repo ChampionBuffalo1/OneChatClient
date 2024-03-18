@@ -80,7 +80,7 @@ export default function GroupActionDialog({ open, setOpen, status }: IActionDial
     const valid = await form.trigger();
     if (!valid) return;
     mutation.mutateAsync(form.getValues());
-  }, [form]);
+  }, [form, mutation]);
 
   return (
     <Dialog

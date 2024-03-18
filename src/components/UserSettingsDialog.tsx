@@ -88,7 +88,7 @@ export default function UserSettingsDialog() {
         return;
       }
       if (!error.response) return;
-      for (const eor of error.response?.data.errors) {
+      for (const eor of error.response.data.errors) {
         form.setError(eor.param, { message: eor.message });
       }
     }
