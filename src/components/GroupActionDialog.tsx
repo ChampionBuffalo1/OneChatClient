@@ -75,6 +75,13 @@ export default function GroupActionDialog({ open, setOpen, status }: IActionDial
         if (err.param === 'name') {
           form.setError('name', { message: err.message });
         }
+        if (err.code === 'UNAUTHORIZED') {
+          toast({
+            variant: 'destructive',
+            title: 'Improper use of invite',
+            description: err.message
+          });
+        }
       }
     }
   });
