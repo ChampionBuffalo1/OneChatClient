@@ -37,11 +37,11 @@ export type GroupType = {
 };
 
 export interface GroupStore {
-  value: GroupType[];
+  value: Record<string, GroupType>;
 }
 
 const initialState: GroupStore = {
-  value: []
+  value: {}
 };
 
 const MAX_MESSAGE_LIMIT = 40;
@@ -55,9 +55,9 @@ export const GroupSlice = createSlice({
      */
     addGroup: (state, action: PayloadAction<GroupType | GroupType[]>) => {
       if (Array.isArray(action.payload)) {
-        for (const group of action.payload) state.value.push(group);
+        for (const group of action.payload) state.value[group.id] = group;
       } else {
-        state.value.push(action.payload);
+        state.value[action.payload.id] = action.payload;
       }
     },
     /**
@@ -65,16 +65,27 @@ export const GroupSlice = createSlice({
      * @param action `id` of the group
      */
     removeGroup: (state, action: PayloadAction<string>) => {
-      const id = state.value.findIndex(group => group.id === action.payload);
-      if (id !== -1) {
-        state.value.splice(id, 1);
-      }
+      delete state.value[action.payload];
     },
 
-    updateGroup: (state, action: PayloadAction<string>) => {},
+    updateGroup: (
+      state,
+      action: PayloadAction<{
+        id: string;
+        name: string;
+        iconUrl?: string;
+        description: string;
+      }>
+    ) => {
+      const group = state.value[action.payload.id];
+      if (!group) return;
+      group.name = action.payload.name;
+      group.iconUrl = action.payload.iconUrl;
+      group.description = action.payload.description;
+    },
 
     addMessage: (state, action: PayloadAction<MessagePayload>) => {
-      const group = state.value.find(group => group.id === action.payload.group.id);
+      const group = state.value[action.payload.id];
       if (!group) return;
       if (group.messages.length >= MAX_MESSAGE_LIMIT) {
         // NOTE: This will cause problem if fetching older messages and adding them into store
@@ -85,7 +96,7 @@ export const GroupSlice = createSlice({
     },
 
     removeMessage: (state, action: PayloadAction<Pick<MessagePayload, 'id' | 'group'>>) => {
-      const group = state.value.find(group => group.id === action.payload.group.id);
+      const group = state.value[action.payload.id];
       if (!group) return;
       const messageIdx = group.messages.findIndex(msg => msg.id === action.payload.id);
       if (messageIdx !== -1) {
@@ -94,7 +105,7 @@ export const GroupSlice = createSlice({
     },
 
     updateMessage: (state, action: PayloadAction<MessagePayload>) => {
-      const group = state.value.find(group => group.id === action.payload.group.id);
+      const group = state.value[action.payload.id];
       if (!group) return;
       const messageIdx = group.messages.findIndex(msg => msg.id === action.payload.id);
       if (messageIdx !== -1) {
@@ -109,7 +120,7 @@ export const GroupSlice = createSlice({
         url: string;
       }>
     ) => {
-      const group = state.value.find(group => group.id === action.payload.id);
+      const group = state.value[action.payload.id];
       if (!group) return;
       group.iconUrl = action.payload.url;
     },

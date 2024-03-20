@@ -65,7 +65,7 @@ export default function GroupSidebar({ selectHandler }: ISideBar) {
         </>
         <div className="mt-4 overflow-y-auto max-h-[82vh]">
           <ScrollArea>
-            {groups
+            {Object.values(groups)
               .filter(group => group.name.includes(searchKey))
               .map(group => (
                 <div
@@ -83,7 +83,9 @@ export default function GroupSidebar({ selectHandler }: ISideBar) {
                     <div className="flex items-center gap-2">
                       <div>
                         <span className="font-medium">{group.name}</span>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 group-hover:text-gray-300">{group.description || ''}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 group-hover:text-gray-300">
+                          {group.description || ''}
+                        </p>
                       </div>
                     </div>
                   </div>
