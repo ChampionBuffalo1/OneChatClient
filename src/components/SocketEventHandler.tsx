@@ -7,6 +7,7 @@ import {
   addGroup,
   addMessage,
   changeIcon,
+  updateGroup,
   removeGroup,
   updateMessage,
   removeMessage,
@@ -31,8 +32,6 @@ export default function SocketEventHandler() {
     }, 1000 * 5); // 5s delay
   }, [toast, navigate]);
 
-  const handleGroupEvent = useCallback(() => {}, []);
-
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -47,8 +46,15 @@ export default function SocketEventHandler() {
       });
 
       // TODO: Create member store and handle these
-      socket.registerEvent('GROUP_JOIN', handleGroupEvent);
-      socket.registerEvent('GROUP_LEAVE', handleGroupEvent);
+      // socket.registerEvent('GROUP_JOIN', console.log);
+      // socket.registerEvent('GROUP_LEAVE', console.log);
+
+      socket.registerEvent(
+        'GROUP_EDIT',
+        (data: { group: { id: string; name: string; description: string; iconUrl?: string } }) => {
+          dispatch(updateGroup(data.group));
+        }
+      );
 
       socket.registerEvent('GROUP_DELETE', (data: { group: { id: string; name: string } }) => {
         dispatch(removeGroup(data.group.id));
@@ -69,7 +75,7 @@ export default function SocketEventHandler() {
         }
       });
     }
-  }, [socket, dispatch, currentUserId, handleGroupEvent, handleInvalidAuth]);
+  }, [socket, dispatch, currentUserId, handleInvalidAuth]);
 
   return <></>;
 }
