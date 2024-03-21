@@ -82,6 +82,12 @@ export default function GroupActionDialog({ open, setOpen, status }: IActionDial
             description: err.message
           });
         }
+        if (err.code === 'INVALID_INVITE') {
+          toast({
+            variant: 'destructive',
+            title: 'Invalid Invite'
+          });
+        }
       }
     }
   });
