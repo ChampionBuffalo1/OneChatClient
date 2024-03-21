@@ -8,12 +8,13 @@ import { useToast } from './ui/use-toast';
 import { axiosInstance } from '@/lib/api';
 import { useAppDispatch } from '@/lib/hooks';
 import { checkPermission } from '@/lib/utils';
+import PermissionDialog from './PermissionDialog';
 import { useMutation } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Check, Edit, MoreHorizontal, Trash2, X } from 'lucide-react';
+import { X, Edit, Check, Trash2, MoreHorizontal } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { MessagePayload, MessageType, removeMessage, updateMessage } from '@/lib/reducers/groups';
+import { MessagePayload, MessageType, removeMessage } from '@/lib/reducers/groups';
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from './ui/context-menu';
 import {
   AlertDialog,
@@ -236,13 +237,18 @@ export default function MessageUserInferface({ message, permission, groupId, use
             <ContextMenuTrigger>
               <p className="mt-1">{text}</p>
             </ContextMenuTrigger>
-            <ContextMenuContent className="w-fit">
+            <ContextMenuContent className="w-fit bg-slate-700">
               <ContextMenuItem>
                 <EditButton />
               </ContextMenuItem>
-              <ContextMenuItem>
+              <ContextMenuItem onSelect={e => e.preventDefault()}>
                 <DeleteButton />
               </ContextMenuItem>
+              {checkPermission(permission, 'CHANGE_PERMISSION') && (
+                <ContextMenuItem onSelect={e => e.preventDefault()}>
+                  <PermissionDialog id={groupId} permission={permission} authorId={message.author.id} />
+                </ContextMenuItem>
+              )}
             </ContextMenuContent>
           </ContextMenu>
         )}
