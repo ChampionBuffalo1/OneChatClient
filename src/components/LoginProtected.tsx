@@ -1,5 +1,6 @@
-import { ComponentType, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { SocketProvider } from './socket-provider';
+import { ComponentType, useEffect, useState } from 'react';
 
 interface ProtectedRouteProps {
   component: ComponentType;
@@ -16,7 +17,13 @@ const ProtectedRoute = ({ component: Component }: ProtectedRouteProps) => {
       navigate('/');
     }
   }, [navigate]);
-  return <>{render ? <Component /> : <></>}</>;
+  return render ? (
+    <SocketProvider>
+      <Component />
+    </SocketProvider>
+  ) : (
+    <></>
+  );
 };
 
 export default ProtectedRoute;

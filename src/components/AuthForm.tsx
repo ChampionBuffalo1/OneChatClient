@@ -1,6 +1,10 @@
 import { z } from 'zod';
-import { toast } from 'react-toastify';
+import { Input } from './ui/input';
+import { Button } from './ui/button';
+import { ApiError } from '@/typings';
 import type { AxiosError } from 'axios';
+import { ToastAction } from './ui/toast';
+import { useToast } from './ui/use-toast';
 import { useForm } from 'react-hook-form';
 import { axiosInstance } from '../lib/api';
 import { useCallback, useState } from 'react';
@@ -8,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AuthenticationProps } from '../pages/Authentication';
-import { Input, Button, Form, FormItem, FormLabel, FormField, FormControl, FormMessage } from '@/components/ui';
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from './ui/form';
 
 const formSchema = z.object({
   username: z
@@ -21,6 +25,7 @@ const formSchema = z.object({
 });
 
 export default function AuthorizationForm({ type }: AuthenticationProps) {
+  const { toast } = useToast();
   const [credError, setCredError] = useState<string>('');
   const form = useForm<formSchema>({
     resolver: zodResolver(formSchema),
@@ -43,21 +48,33 @@ export default function AuthorizationForm({ type }: AuthenticationProps) {
       );
       return data;
     },
-    onSuccess: (data: Omit<ApiResponse, 'errors'>) => {
+    onSuccess: (data: ApiResponse) => {
       localStorage.setItem('token', data.content.meta.access_token);
       localStorage.setItem('user', JSON.stringify(data.content.data));
       navigate('/home');
     },
-    onError: (error: AxiosError<Omit<ApiResponse, 'content'>>) => {
+    onError: (error: AxiosError<ApiError<'username' | 'password'>>, { username, password }) => {
       if (error.message === 'Network Error') {
-        toast.error('Network Error!');
+        toast({
+          variant: 'destructive',
+          title: 'Uh oh! Something went wrong.',
+          description: 'There was a problem with your request.',
+          action: (
+            <ToastAction
+              altText="Try again"
+              onClick={() => mutation.mutateAsync({ username, password })}
+              className="rounded-lg hover:bg-red-400 border border-gray-200 p-2"
+            >
+              Try again
+            </ToastAction>
+          )
+        });
         return;
       }
       if (!error.response) return;
       const isRootError = error.response.data.errors.find(err => !err.param);
       if (isRootError) {
-        // TODO: Figure out why the message still contains quotes
-        setCredError(isRootError.message.replaceAll("'", ''));
+        setCredError(isRootError.message);
         return;
       }
       for (const err of error.response.data.errors) {
@@ -118,6 +135,9 @@ export default function AuthorizationForm({ type }: AuthenticationProps) {
                   placeholder="Password"
                   disabled={mutation.isPending}
                   className="bg-zinc-700 border-gray-600 focus:border-blue-700"
+                  onChangeCapture={() => {
+                    if (credError) setCredError('');
+                  }}
                   {...field}
                 />
               </FormControl>
@@ -142,7 +162,6 @@ export default function AuthorizationForm({ type }: AuthenticationProps) {
 }
 
 type formSchema = z.infer<typeof formSchema>;
-// the errors and content fields are mutually exclusive
 type ApiResponse = {
   content: {
     data: {
@@ -155,9 +174,4 @@ type ApiResponse = {
       access_token: string;
     };
   };
-  errors: {
-    param: 'username' | 'password';
-    code: string;
-    message: string;
-  }[];
 };
