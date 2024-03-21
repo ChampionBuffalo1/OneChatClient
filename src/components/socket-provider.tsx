@@ -97,6 +97,7 @@ export function SocketProvider({ children }: SockerProviderProps) {
 
 type SocketPayload = {
   op:
+    | 'PERM_EDIT'
     | 'GROUP_EDIT'
     | 'GROUP_JOIN'
     | 'GROUP_LEAVE'

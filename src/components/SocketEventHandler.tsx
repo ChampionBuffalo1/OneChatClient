@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import { useEffect, useContext, useCallback } from 'react';
+import { setPermission } from '@/lib/reducers/permissions';
 import { SocketContext } from '@/components/socket-provider';
 import { useAppDispatch, useAppSelector } from '../lib/hooks';
 import {
@@ -55,6 +56,15 @@ export default function SocketEventHandler() {
           dispatch(updateGroup(data.group));
         }
       );
+
+      socket.registerEvent('PERM_EDIT', (data: { group: { id: string }; userId: string; permissions: number }) => {
+        dispatch(
+          setPermission({
+            id: data.group.id,
+            permission: data.permissions
+          })
+        );
+      });
 
       socket.registerEvent('GROUP_DELETE', (data: { group: { id: string; name: string } }) => {
         dispatch(removeGroup(data.group.id));
