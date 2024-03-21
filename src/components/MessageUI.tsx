@@ -50,14 +50,6 @@ export default function MessageUserInferface({ message, permission, groupId, use
       const { data } = await axiosInstance.delete(`/group/${groupId}/message/${message.id}`);
       return data.content.data;
     },
-    onSuccess: (data: { id: string; group: { id: string } }) => {
-      dispatch(
-        removeMessage({
-          id: data.id,
-          group: { id: data.group.id } as MessagePayload['group']
-        })
-      );
-    },
     onError: (error: AxiosError<ApiError>) => {
       if (error.message === 'Network Error') {
         toast({
@@ -102,10 +94,7 @@ export default function MessageUserInferface({ message, permission, groupId, use
       );
       return data.content.data;
     },
-    onSuccess: data => {
-      dispatch(updateMessage(data));
-      setEditMode(false);
-    },
+    onSuccess: () => setEditMode(false),
     onError: (error: AxiosError<ApiError>, parameters) => {
       if (error.message === 'Network Error') {
         toast({
@@ -211,7 +200,13 @@ export default function MessageUserInferface({ message, permission, groupId, use
                   <Check />
                 </button>
 
-                <X className="text-red-500 cursor-pointer" onClick={() => setEditMode(false)} />
+                <button
+                  disabled={editMutation.isPending}
+                  onClick={() => setEditMode(false)}
+                  className="cursor-pointer disabled:cursor-wait text-red-500 disabled:text-gray-500"
+                >
+                  <X />
+                </button>
               </div>
             )}
             {!editMode && (

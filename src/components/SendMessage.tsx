@@ -23,12 +23,7 @@ export default function SendMessage({ groupId }: { groupId: string }) {
       }>(`/group/${groupId}/message/create`, JSON.stringify({ text }));
       return data.content.data;
     },
-    onSuccess: data => {
-      if (data) {
-        dispatch(addMessage(data));
-        setText('');
-      }
-    },
+    onSuccess: () => setText(''),
     onError: (error: AxiosError<ApiError>, parameters) => {
       if (error.message === 'Network Error') {
         toast({

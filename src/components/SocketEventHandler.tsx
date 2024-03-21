@@ -60,19 +60,14 @@ export default function SocketEventHandler() {
         dispatch(removeGroup(data.group.id));
       });
       socket.registerEvent('MESSAGE_EDIT', (data: MessagePayload) => {
-        if (data.author.id !== currentUserId) {
-          dispatch(updateMessage(data));
-        }
+        dispatch(updateMessage(data));
       });
       socket.registerEvent('MESSAGE_CREATE', (data: MessagePayload) => {
-        if (data.author.id !== currentUserId) {
-          dispatch(addMessage(data));
-        }
+        dispatch(addMessage(data));
       });
       socket.registerEvent('MESSAGE_DELETE', (data: MessagePayload) => {
-        if (data.author.id !== currentUserId) {
-          dispatch(removeMessage(data));
-        }
+        console.log(data);
+        dispatch(removeMessage(data));
       });
     }
   }, [socket, dispatch, currentUserId, handleInvalidAuth]);
