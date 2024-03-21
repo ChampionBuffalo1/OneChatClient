@@ -7,6 +7,7 @@ import { ToastAction } from './ui/toast';
 import { useToast } from './ui/use-toast';
 import { axiosInstance } from '@/lib/api';
 import { useAppDispatch } from '@/lib/hooks';
+import { checkPermission } from '@/lib/utils';
 import { useMutation } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
@@ -28,11 +29,12 @@ import {
 
 interface MessageUIProps {
   message: MessageType;
+  permission: number;
   groupId: string;
   userId: string;
 }
 
-export default function MessageUserInferface({ message, groupId, userId }: MessageUIProps) {
+export default function MessageUserInferface({ message, permission, groupId, userId }: MessageUIProps) {
   const { toast } = useToast();
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
@@ -202,9 +204,9 @@ export default function MessageUserInferface({ message, groupId, userId }: Messa
             {editMode && (
               <div className="flex space-x-2">
                 <button
-                  className="cursor-pointer disabled:cursor-wait text-green-500 disabled:text-gray-500"
-                  onClick={() => editMutation.mutateAsync(text)}
                   disabled={editMutation.isPending}
+                  onClick={() => editMutation.mutateAsync(text)}
+                  className="cursor-pointer disabled:cursor-wait text-green-500 disabled:text-gray-500"
                 >
                   <Check />
                 </button>
@@ -216,15 +218,17 @@ export default function MessageUserInferface({ message, groupId, userId }: Messa
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger>
                   <div>
-                    {message.author.id === userId && (
+                    {(message.author.id === userId || checkPermission(permission, 'MANAGE_MESSAGES')) && (
                       <MoreHorizontal className="hover:bg-gray-700 hover:cursor-pointer hover:rounded-sm w-10" />
                     )}
                   </div>
                 </PopoverTrigger>
-                <PopoverContent className="w-48">
+                <PopoverContent className="w-48 bg-slate-700">
                   <div className="space-y-2">
                     {message.author.id === userId && <EditButton />}
-                    {message.author.id === userId && <DeleteButton />}
+                    {(message.author.id === userId || checkPermission(permission, 'MANAGE_MESSAGES')) && (
+                      <DeleteButton />
+                    )}
                   </div>
                 </PopoverContent>
               </Popover>

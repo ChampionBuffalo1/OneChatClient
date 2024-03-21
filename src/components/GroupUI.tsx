@@ -45,7 +45,13 @@ export default function GroupUI({ id }: GroupProps) {
       <div className="mx-2 flex-grow flex-row-reverse overflow-y-auto">
         <ScrollArea>
           {messages.map((msg, index) => (
-            <MessageUI key={index} message={msg} userId={currentUserId} groupId={group.id} />
+            <MessageUI
+              key={index}
+              message={msg}
+              groupId={group.id}
+              userId={currentUserId}
+              permission={userPermissions}
+            />
           ))}
         </ScrollArea>
       </div>
