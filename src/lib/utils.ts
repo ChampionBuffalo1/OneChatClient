@@ -5,47 +5,23 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-const Permissions = {
-  READ_MESSAGES: 1 << 0,
+export const Permissions = {
+  READ_MESSAGES: Math.trunc(1),
   WRITE_MESSAGES: 1 << 1,
-  MANAGE_MESSAGES: (1 << 2) | (1 << 1) | (1 << 0),
+  MANAGE_MESSAGES: (1 << 2) - 1,
 
   CHANGE_PERMISSION: 1 << 3,
+
   INVITE_MEMBER: 1 << 4,
-  KICK_MEMBER: 1 << 5,
   MANAGE_GROUP: 1 << 6,
   ADMINISTRATOR: (1 << 7) - 1
 };
 
-type AllPermissions = keyof typeof Permissions;
+export type AllPermissions = keyof typeof Permissions;
 type AllowedPermission = AllPermissions | AllPermissions[];
-type PermissionRecord = {
-  denied: AllPermissions[];
-  allowed: AllPermissions[];
-};
 
 export function checkPermission(permissionBits: number, permission: AllPermissions): boolean {
-  return (permissionBits & Permissions[permission]) !== 0;
-}
-
-export function checkMultiplePermission(permissionBits: number, permissions: AllowedPermission): PermissionRecord {
-  if (!Array.isArray(permissions)) {
-    permissions = [permissions];
-  }
-
-  const result = {
-    denied: [],
-    allowed: []
-  } as PermissionRecord;
-
-  for (const permission of permissions) {
-    if (checkPermission(permissionBits, permission)) {
-      result.allowed.push(permission);
-    } else {
-      result.denied.push(permission);
-    }
-  }
-  return result;
+  return (permissionBits & Permissions[permission]) === Permissions[permission];
 }
 
 export function setPermission(permissionBits: number, permissions: AllowedPermission): number {
