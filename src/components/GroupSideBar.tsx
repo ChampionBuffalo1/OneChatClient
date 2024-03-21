@@ -1,14 +1,15 @@
 import debounce from 'debounce';
 import { Input } from './ui/input';
+import { Label } from './ui/label';
 import { Plus } from 'lucide-react';
 import { Button } from './ui/button';
 import LoggedInUser from './LoggedInUser';
 import { Separator } from './ui/separator';
 import { useAppSelector } from '@/lib/hooks';
 import { ScrollArea } from './ui/scroll-area';
+import GroupActionDialog from './GroupActionDialog';
 import { useCallback, useRef, useState } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
-import GroupActionDialog from './GroupActionDialog';
 
 type ISideBar = {
   selectHandler: (groupId: string) => void;
@@ -19,7 +20,7 @@ export default function GroupSidebar({ selectHandler }: ISideBar) {
   const [searchKey, setSearchKey] = useState('');
   const contentKeyRef = useRef<'join' | 'create'>();
 
-  const groups = useAppSelector(state => state.groups.value);
+  const groups = Object.values(useAppSelector(state => state.groups.value) || '{}');
   const onChangeHandler = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchKey(event.target.value);
@@ -28,7 +29,7 @@ export default function GroupSidebar({ selectHandler }: ISideBar) {
   );
 
   return (
-    <div className="w-[18%] border-r-[1px] border-r-gray-100 overflow-hidden">
+    <div className="w-[18%] border-r-[1px] border-r-gray-100">
       <nav className="flex-1 py-2">
         <>
           <LoggedInUser />
@@ -63,9 +64,10 @@ export default function GroupSidebar({ selectHandler }: ISideBar) {
             />
           </div>
         </>
-        <div className="mt-4 overflow-y-auto max-h-[82vh]">
-          <ScrollArea>
-            {Object.values(groups)
+        <div className="mt-4 max-h-[80vh] flex flex-col">
+          {groups.length === 0 && <Label className="text-md"> Create or Join a group</Label>}
+          <ScrollArea className="overflow-auto">
+            {groups
               .filter(group => group.name.includes(searchKey))
               .map(group => (
                 <div
