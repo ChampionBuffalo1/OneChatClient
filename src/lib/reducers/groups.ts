@@ -85,7 +85,7 @@ export const GroupSlice = createSlice({
     },
 
     addMessage: (state, action: PayloadAction<MessagePayload>) => {
-      const group = state.value[action.payload.id];
+      const group = state.value[action.payload.group.id];
       if (!group) return;
       if (group.messages.length >= MAX_MESSAGE_LIMIT) {
         // NOTE: This will cause problem if fetching older messages and adding them into store
@@ -96,7 +96,7 @@ export const GroupSlice = createSlice({
     },
 
     removeMessage: (state, action: PayloadAction<Pick<MessagePayload, 'id' | 'group'>>) => {
-      const group = state.value[action.payload.id];
+      const group = state.value[action.payload.group.id];
       if (!group) return;
       const messageIdx = group.messages.findIndex(msg => msg.id === action.payload.id);
       if (messageIdx !== -1) {
@@ -105,7 +105,7 @@ export const GroupSlice = createSlice({
     },
 
     updateMessage: (state, action: PayloadAction<MessagePayload>) => {
-      const group = state.value[action.payload.id];
+      const group = state.value[action.payload.group.id];
       if (!group) return;
       const messageIdx = group.messages.findIndex(msg => msg.id === action.payload.id);
       if (messageIdx !== -1) {
