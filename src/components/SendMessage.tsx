@@ -6,14 +6,12 @@ import { ApiError } from '@/typings';
 import { Textarea } from './ui/textarea';
 import { axiosInstance } from '@/lib/api';
 import { useToast } from './ui/use-toast';
-import { useAppDispatch } from '@/lib/hooks';
 import { useMutation } from '@tanstack/react-query';
 import { ToastAction } from '@radix-ui/react-toast';
-import { MessagePayload, addMessage } from '@/lib/reducers/groups';
+import { MessagePayload } from '@/lib/reducers/groups';
 
 export default function SendMessage({ groupId }: { groupId: string }) {
   const { toast } = useToast();
-  const dispatch = useAppDispatch();
   const [text, setText] = useState<string>('');
 
   const mutation = useMutation({

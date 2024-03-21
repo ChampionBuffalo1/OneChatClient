@@ -8,12 +8,10 @@ import { ToastAction } from './ui/toast';
 import { useToast } from './ui/use-toast';
 import { useForm } from 'react-hook-form';
 import { axiosInstance } from '@/lib/api';
+import { useAppSelector } from '@/lib/hooks';
 import { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { updateUsername } from '@/lib/reducers/user';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { Form, FormItem, FormLabel, FormControl, FormField, FormMessage } from './ui/form';
 import {
   Dialog,
@@ -43,8 +41,6 @@ const formSchema = z.object({
 
 export default function GroupSettings({ id }: { id: string }) {
   const { toast } = useToast();
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
   const group = useAppSelector(state => state.groups.value[id]);
 

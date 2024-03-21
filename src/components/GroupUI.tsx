@@ -16,25 +16,22 @@ export default function GroupUI({ id }: GroupProps) {
   const currentUserId = useAppSelector(state => state.user.data.id);
   const group = useAppSelector(state => state.groups.value[id]);
   const messages = group?.messages || [];
-  const userPermissions =
-    useAppSelector(state => state.perms.value.find(perm => perm.groupId === id && perm.userId === currentUserId))
-      ?.permission || 0;
+  const userPermissions = useAppSelector(state => state.perms.value[id]) || 0;
 
   useEffect(() => {
     if (userPermissions === 0) {
       axiosInstance
-        .get<{ content: { data: { id: string; permissions: number } } }>(`/group/${group.id}/member/permission`)
+        .post<{ content: { data: { id: string; permissions: number } } }>(`/group/${group.id}/member/permission`)
         .then(({ data }) => {
           dispatch(
             setPermission({
-              groupId: group.id,
-              userId: currentUserId,
+              id: group.id,
               permission: data.content.data.permissions
             })
           );
         });
     }
-  }, [userPermissions]);
+  }, [group.id, dispatch, userPermissions, currentUserId]);
 
   return (
     <div className="flex flex-col flex-1">
