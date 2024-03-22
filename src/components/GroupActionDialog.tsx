@@ -46,9 +46,7 @@ export default function GroupActionDialog({ open, setOpen, status }: IActionDial
       );
       return data;
     },
-    onSuccess: data => {
-      // @ts-expect-error: Need to fix the type error
-      dispatch(addGroup(status === 'join' ? data.content.data.group : data.content.data));
+    onSuccess: () => {
       setOpen(false);
     },
     onError: (error: AxiosError<ApiError>, variables) => {

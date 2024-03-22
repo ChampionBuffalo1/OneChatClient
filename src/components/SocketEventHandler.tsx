@@ -12,7 +12,8 @@ import {
   removeGroup,
   updateMessage,
   removeMessage,
-  MessagePayload
+  MessagePayload,
+  MessageType
 } from '@/lib/reducers/groups';
 
 export default function SocketEventHandler() {
@@ -46,9 +47,34 @@ export default function SocketEventHandler() {
         dispatch(changeIcon({ url: data.url, id: data.group.id }));
       });
 
-      // TODO: Create member store and handle these
-      // socket.registerEvent('GROUP_JOIN', console.log);
-      // socket.registerEvent('GROUP_LEAVE', console.log);
+      socket.registerEvent(
+        'GROUP_JOIN',
+        (data: {
+          group: {
+            id: string;
+            name: string;
+            iconUrl?: string;
+            description?: string;
+            messages: MessageType[]
+          };
+        }) => {
+          dispatch(addGroup(data.group));
+        }
+      );
+
+      socket.registerEvent(
+        'GROUP_CREATE',
+        (data: {
+          group: {
+            id: string;
+            name: string;
+            iconUrl?: string;
+            description?: string;
+          };
+        }) => {
+          dispatch(addGroup({ messages: [], ...data.group }));
+        }
+      );
 
       socket.registerEvent(
         'GROUP_EDIT',

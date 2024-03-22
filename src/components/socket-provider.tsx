@@ -102,6 +102,7 @@ type SocketPayload = {
     | 'GROUP_JOIN'
     | 'GROUP_LEAVE'
     | 'ICON_CHANGE'
+    | 'GROUP_CREATE'
     | 'GROUP_DELETE'
     | 'MESSAGE_EDIT'
     | 'USER_METADATA'
