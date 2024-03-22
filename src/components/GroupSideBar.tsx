@@ -1,4 +1,5 @@
 import debounce from 'debounce';
+import { cn } from '@/lib/utils';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Plus } from 'lucide-react';
@@ -12,10 +13,11 @@ import { useCallback, useRef, useState } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 
 type ISideBar = {
+  className?: string;
   selectHandler: (groupId: string) => void;
 };
 
-export default function GroupSidebar({ selectHandler }: ISideBar) {
+export default function GroupSidebar({ selectHandler, className }: ISideBar) {
   const [open, setOpen] = useState(false);
   const [searchKey, setSearchKey] = useState('');
   const contentKeyRef = useRef<'join' | 'create'>();
@@ -29,7 +31,7 @@ export default function GroupSidebar({ selectHandler }: ISideBar) {
   );
 
   return (
-    <div className="w-[18%] border-r-[1px] border-r-gray-100">
+    <div className={cn('w-full lg:w-[18%] border-r-[1px] border-r-gray-100', className)}>
       <nav className="flex-1 py-2">
         <>
           <LoggedInUser />

@@ -11,7 +11,7 @@ import GroupSettings from './GroupSettings';
 import { useAppSelector } from '@/lib/hooks';
 import { checkPermission } from '@/lib/utils';
 import { useMutation } from '@tanstack/react-query';
-import { Copy, Check, ChevronDown } from 'lucide-react';
+import { Copy, Check, ChevronDown, X } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 import {
@@ -26,7 +26,15 @@ import {
 } from './ui/alert-dialog';
 import GroupAvatar from './GroupAvatar';
 
-export default function GroupHeader({ id, permission }: { permission: number; id: string }) {
+export default function GroupHeader({
+  id,
+  permission,
+  closeHandler
+}: {
+  permission: number;
+  id: string;
+  closeHandler: () => void;
+}) {
   const { toast } = useToast();
   const [invite, setInvite] = useState(false);
   const group = useAppSelector(state => state.groups.value[id]);
@@ -100,7 +108,7 @@ export default function GroupHeader({ id, permission }: { permission: number; id
               <AlertDialogDescription className="text-white">{group.description}</AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel className='text-primary'>Close</AlertDialogCancel>
+              <AlertDialogCancel className="text-primary">Close</AlertDialogCancel>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
@@ -155,15 +163,20 @@ export default function GroupHeader({ id, permission }: { permission: number; id
           </PopoverTrigger>
           <PopoverContent className="w-32 bg-gray-900 text-primary-foreground">
             <div className="flex flex-col justify-between">
-              <LeaveGroup id={id} />
+              <Button onClick={closeHandler} className="flex justify-between hover:bg-slate-800 shadow-none">
+                <X />
+                Close
+              </Button>
+              <Separator className="w-full my-2 bg-gray-400" />
 
               {checkPermission(permission, 'MANAGE_GROUP') && (
                 <>
-                  <Separator className="w-full my-2 bg-gray-400" />
                   <GroupSettings id={id} />
+                  <Separator className="w-full my-2 bg-gray-400" />
                 </>
               )}
             </div>
+            <LeaveGroup id={id} />
           </PopoverContent>
         </Popover>
       </div>

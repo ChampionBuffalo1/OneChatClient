@@ -140,8 +140,14 @@ export default function GroupSettings({ id }: { id: string }) {
       }}
     >
       <DialogTrigger asChild>
-        <Button variant="link" className="hover:bg-gray-600 text-primary-foreground">
-          <Settings className="mx-2" /> Settings
+        <Button
+          variant="link"
+          className="p-1 hover:bg-gray-600 rounded-md text-primary-foreground hover:cursor-pointer"
+          asChild
+        >
+          <div className="flex justify-between">
+            <Settings /> Settings
+          </div>
         </Button>
       </DialogTrigger>
 
