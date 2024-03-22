@@ -67,8 +67,8 @@ export default function LeaveGroup({ id }: { id: string }) {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger className="bg-red-500 p-2 rounded-md">
-        <div className="flex justify-evenly">
+      <AlertDialogTrigger className="bg-red-500 p-2 rounded-md hover:bg-red-600 hover:cursor-pointer" asChild>
+        <div className="flex justify-between">
           <LogOut />
           Leave
         </div>
