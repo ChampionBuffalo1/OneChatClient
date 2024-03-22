@@ -9,9 +9,10 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 
 interface GroupProps {
   id: string;
+  closeHandler: () => void;
 }
 
-export default function GroupUI({ id }: GroupProps) {
+export default function GroupUI({ id, closeHandler }: GroupProps) {
   const dispatch = useAppDispatch();
   const currentUserId = useAppSelector(state => state.user.data.id);
   const group = useAppSelector(state => state.groups.value[id]);
@@ -36,7 +37,7 @@ export default function GroupUI({ id }: GroupProps) {
   return (
     <div className="flex flex-col flex-1">
       <div className="top-0 flex justify-between rounded-md bg-gray-950">
-        <GroupHeader id={group.id} permission={userPermissions} />
+        <GroupHeader id={group.id} permission={userPermissions} closeHandler={closeHandler} />
       </div>
 
       <div className="mx-2 flex-grow flex-row-reverse overflow-y-auto">

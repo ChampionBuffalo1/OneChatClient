@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import GroupUI from '@/components/GroupUI';
 import { Helmet } from 'react-helmet-async';
@@ -25,8 +26,8 @@ export default function Home() {
         <title>OneChat</title>
       </Helmet>
       <div className="flex flex-row h-[100vh] w-full bg-primary text-primary-foreground overflow-hidden">
-        <GroupSidebar selectHandler={setGroupId} />
-        {groupId && <GroupUI id={groupId} />}
+        <GroupSidebar selectHandler={setGroupId} className={cn(groupId && 'hidden lg:flex')} />
+        {groupId && <GroupUI id={groupId} closeHandler={() => setGroupId('')} />}
         {!groupId && <InformativeBanner />}
       </div>
     </>
