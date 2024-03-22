@@ -190,7 +190,7 @@ export default function MessageUserInferface({ message, permission, groupId, use
             )}
           </div>
 
-          <div className="absolute right-2 opacity-0 group-hover:opacity-100">
+          <div className="absolute right-2">
             {editMode && (
               <div className="flex space-x-2">
                 <button
@@ -210,10 +210,11 @@ export default function MessageUserInferface({ message, permission, groupId, use
                 </button>
               </div>
             )}
+
             {!editMode && (
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger>
-                  <div>
+                  <div className="opacity-0 group-hover:opacity-100">
                     {(message.author.id === userId || checkPermission(permission, 'MANAGE_MESSAGES')) && (
                       <MoreHorizontal className="hover:bg-gray-700 hover:cursor-pointer hover:rounded-sm w-10" />
                     )}
@@ -238,9 +239,7 @@ export default function MessageUserInferface({ message, permission, groupId, use
               <p className="mt-1">{text}</p>
             </ContextMenuTrigger>
             <ContextMenuContent className="w-fit bg-slate-700">
-              <ContextMenuItem>
-                <EditButton />
-              </ContextMenuItem>
+              <ContextMenuItem>{message.author.id === userId && <EditButton />}</ContextMenuItem>
               <ContextMenuItem onSelect={e => e.preventDefault()}>
                 <DeleteButton />
               </ContextMenuItem>
