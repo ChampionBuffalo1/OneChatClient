@@ -2,7 +2,7 @@ name: Build Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -14,12 +14,12 @@ jobs:
 
     name: Node ${{ matrix.node_version }} on ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node_version }}
           cache: 'yarn'
       - name: Building Frontend
         run: |
-          yarn install --ignore-optional --frozen-lockfile
+          yarn install --frozen-lockfile
           yarn build
