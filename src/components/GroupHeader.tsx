@@ -176,7 +176,7 @@ export default function GroupHeader({
                 </>
               )}
             </div>
-            <LeaveGroup id={id} />
+            <LeaveGroup id={id} closeHandler={closeHandler} />
           </PopoverContent>
         </Popover>
       </div>

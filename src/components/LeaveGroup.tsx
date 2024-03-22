@@ -19,7 +19,7 @@ import {
   AlertDialogDescription
 } from './ui/alert-dialog';
 
-export default function LeaveGroup({ id }: { id: string }) {
+export default function LeaveGroup({ id, closeHandler }: { id: string; closeHandler: () => void }) {
   const { toast } = useToast();
   const disaptch = useAppDispatch();
   const leaveMutation = useMutation({
@@ -36,6 +36,7 @@ export default function LeaveGroup({ id }: { id: string }) {
       };
     }) => {
       disaptch(removeGroup(data.group.id));
+      closeHandler();
     },
     onError: (error: AxiosError<ApiError>) => {
       if (error.message === 'Network Error') {

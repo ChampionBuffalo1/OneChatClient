@@ -20,7 +20,7 @@ export default function GroupUI({ id, closeHandler }: GroupProps) {
   const userPermissions = useAppSelector(state => state.perms.value[id]) || 0;
 
   useEffect(() => {
-    if (userPermissions === 0) {
+    if (userPermissions === 0 && group) {
       axiosInstance
         .post<{ content: { data: { id: string; permissions: number } } }>(`/group/${group.id}/member/permission`)
         .then(({ data }) => {
@@ -32,7 +32,9 @@ export default function GroupUI({ id, closeHandler }: GroupProps) {
           );
         });
     }
-  }, [group.id, dispatch, userPermissions, currentUserId]);
+  }, [group, dispatch, userPermissions, currentUserId]);
+
+  if (!group) return <></>;
 
   return (
     <div className="flex flex-col flex-1">
