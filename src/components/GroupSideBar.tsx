@@ -2,7 +2,6 @@ import debounce from 'debounce';
 import { cn } from '@/lib/utils';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import { Plus } from 'lucide-react';
 import { Button } from './ui/button';
 import LoggedInUser from './LoggedInUser';
 import { Separator } from './ui/separator';
@@ -35,9 +34,9 @@ export default function GroupSidebar({ selectHandler, className }: ISideBar) {
       <nav className="flex-1 py-2">
         <>
           <LoggedInUser />
-          <div className="flex items-center gap-2 px-4 mt-4 text-primary">
+          <div className="flex items-center gap-2 px-2 mt-4 text-primary">
             <Button
-              className="flex-1"
+              className="w-1/2"
               variant="secondary"
               onClick={() => {
                 contentKeyRef.current = 'join';
@@ -47,14 +46,14 @@ export default function GroupSidebar({ selectHandler, className }: ISideBar) {
               Join Group
             </Button>
             <Button
-              className="flex-1"
+              className="w-1/2"
               variant="secondary"
               onClick={() => {
                 contentKeyRef.current = 'create';
                 setOpen(true);
               }}
             >
-              <Plus className="mr-2" size={18} /> Create Group
+              Create Group
             </Button>
           </div>
           <div className="px-2 mt-4">
